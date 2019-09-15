@@ -1,13 +1,14 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import model.User;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import services.UserService;
-import model.User;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public class UserController extends Controller {
     private final UserService service;
@@ -31,16 +32,32 @@ public class UserController extends Controller {
     }
 
     public Result getAll() {
-//        List<Document> list = this.service.getAll();
-//        JsonNode content =  Json.toJson(list);
-//
-//        return ok(content);
+        List<User> list = this.service.getAll();
+        JsonNode content =  Json.toJson(list);
+
+        return ok(content);
+    }
+
+    public Result getById(Integer id) {
+        User out = this.service.getById(id);
+
+        JsonNode content = Json.toJson(out);
+        return created(content);
+    }
+
+    public Result delete(Integer id) {
+        this.service.delete(id);
+
         return ok();
     }
 
-    public Result delete(String id) {
-//        this.service.delete(id);
+    public Result find() {
+        String nickname = request().getQueryString("nickname");
+        String name = request().getQueryString("name");
+        List<User> list = this.service.find(nickname, name);
 
-        return ok();
+        JsonNode content =  Json.toJson(list);
+
+        return ok(content);
     }
 }

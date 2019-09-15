@@ -30,4 +30,4 @@ project/.sbtserver.lock
 project/project
 project/target
 /.idea
-
+.gradle/
