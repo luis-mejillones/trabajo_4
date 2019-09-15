@@ -1,8 +1,11 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import services.UserService;
+import model.User;
 
 import javax.inject.Inject;
 
@@ -15,17 +18,16 @@ public class UserController extends Controller {
     }
 
     public Result create() throws Exception {
-//        JsonNode json = request().body().asJson();
-//        if (json == null) {
-//            return badRequest("Expecting Json data");
-//        }
-//
-//        Kudos kudos = Json.mapper().treeToValue(json, Kudos.class);
-//        Kudos out = this.service.create(kudos);
-//
-//        JsonNode content = Json.toJson(out);
-//        return created(content);
-        return ok();
+        JsonNode json = request().body().asJson();
+        if (json == null) {
+            return badRequest("Expecting Json data");
+        }
+
+        User user = Json.mapper().treeToValue(json, User.class);
+        User out = this.service.create(user);
+
+        JsonNode content = Json.toJson(out);
+        return created(content);
     }
 
     public Result getAll() {

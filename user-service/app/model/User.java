@@ -1,39 +1,28 @@
 package model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.ebean.Model;
 
-import java.time.ZonedDateTime;
-
-import static util.Constants.DATE_FORMAT;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class User {
+@Entity
+@Table(name = "user")
+public class User extends Model {
+    @Id
     @JsonProperty
-    public String id;
-
-    @JsonProperty
-    public String href;
-
-    @JsonProperty
-    public String topic;
-
-    @JsonFormat(pattern = DATE_FORMAT, timezone = "UTC")
-    @JsonProperty
-    public ZonedDateTime date;
+    public Integer id;
 
     @JsonProperty
-    public String place;
+    public String nickname;
 
     @JsonProperty
-    public String targetId;
+    public String fullName;
 
     @JsonProperty
-    public String content;
-
-    @JsonProperty
-    public String sourceId;
-
-
+    public Integer kudosQty;
 }

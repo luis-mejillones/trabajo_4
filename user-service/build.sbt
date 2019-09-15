@@ -2,20 +2,17 @@ name := """user-service"""
 
 version := "1.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayJava)
+lazy val root = Project( id = "user-service", base = file(".")).enablePlugins(PlayJava, PlayEbean)
 
 scalaVersion := "2.11.6"
-
-crossScalaVersions := Seq("2.11.12", "2.12.4")
-
-libraryDependencies += guice
 
 /**
  * Dependencies
  */
 libraryDependencies ++= Seq (
   javaWs,
-  "mysql" % "mysql-connector-java" % "5.1.48",
+  guice,
+  "mysql" % "mysql-connector-java" % "5.1.36",
   "com.fasterxml.jackson.core" % "jackson-core" % "2.9.9",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.9",
   "com.fasterxml.jackson.core" % "jackson-annotations" % "2.9.9"

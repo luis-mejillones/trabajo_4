@@ -13,17 +13,17 @@ services:
     ports:
       - 27017:27017
 #      command: mongod --smallfiles --logpath=/dev/null # --quiet
-#  mysql:
-#    image: mysql:5.7
-#    container_name: mysql
-#    ports:
-#      - 3306:3306
-#    volumes:
-#      - .volumes/mysql/data:/var/lib/mysql
-#      - .volumes/mysql/tmp:/tmp/mysql
-#    environment:
-#      - MYSQL_DATABASE=omega
-#      - MYSQL_ROOT_PASSWORD=12345
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - .volumes/mysql/data:/var/lib/mysql
+      - .volumes/mysql/tmp:/tmp/mysql
+    environment:
+      - MYSQL_DATABASE=omega
+      - MYSQL_ROOT_PASSWORD=12345
 #  els:
 #    image: elasticsearch:2.3.0
 #    container_name: elasticsearch
