@@ -10,5 +10,8 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 ################# Kudos Controller ###############
 POST /kudos/create          controllers.KudosController.create()
+POST /kudos/delete/:id      controllers.KudosController.delete(id: String)
 GET  /kudos/list            controllers.KudosController.getAll()
-POST /kudos/delete/:id      controllers.KudosController.delete(id)
+GET  /kudos/target/:id      controllers.KudosController.getByTargetId(id: Integer)
+
+GET  /kudos/test/mq      controllers.KudosController.testmq()

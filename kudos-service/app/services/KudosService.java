@@ -8,14 +8,12 @@ import model.Kudos;
 import org.bson.Document;
 import play.Logger;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import static com.mongodb.client.model.Filters.eq;
-import static util.Constants.BASE_HREF;
-
-//import util.Logger;
 
 public class KudosService {
     private MongoClient mongoClient;
@@ -33,23 +31,37 @@ public class KudosService {
     }
 
     public Kudos create(Kudos kudos) {
-        String baseHref = BASE_HREF + "/kudos";
         kudos.id = UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
-        kudos.href = String.format("%s/%s", baseHref, kudos.id);
-
+        kudos.date = ZonedDateTime.now();
         Document doc = kudos.toDocument();
         this.collection.insertOne(doc);
-        Logger.info("Kudos created with id: " + kudos);
+        Logger.info("Kudos created with id: " + kudos.id);
 
         return kudos;
     }
 
     public List<Document> getAll() {
-        MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-        MongoDatabase database = mongoClient.getDatabase("omega");
-        MongoCollection<Document> collection = database.getCollection("kudos");
+        MongoCursor<Document> cursor = this.collection.find().iterator();
+        List<Document> list = this.retrieveDocuments(cursor);
+        Logger.info("Kudos retrieved: " + list.size());
 
-        MongoCursor<Document> cursor = collection.find().iterator();
+        return list;
+    }
+
+    public List<Document> getByTargetId(Integer id) {
+        MongoCursor<Document> cursor = this.collection.find(eq("targetId", id)).iterator();
+        List<Document> list = this.retrieveDocuments(cursor);
+        Logger.info("Kudos retrieved: " + list.size() + " for user target id: " + id);
+
+        return list;
+    }
+
+    public void delete(String id) {
+        this.collection.deleteOne(eq("_id", id));
+        Logger.info("Kudos delete with id: " + id);
+    }
+
+    private List<Document> retrieveDocuments(MongoCursor<Document> cursor) {
         List<Document> list = new ArrayList<>();
         try {
             while (cursor.hasNext()) {
@@ -59,13 +71,6 @@ public class KudosService {
             cursor.close();
         }
 
-        Logger.info("Kudos retrieved: " + list.size());
-
         return list;
-    }
-
-    public void delete(String id) {
-        this.collection.deleteOne(eq("_id", id));
-        Logger.info("Kudos delete with id: " + id);
     }
 }

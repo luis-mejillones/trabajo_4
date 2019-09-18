@@ -11,11 +11,8 @@ import static util.Constants.DATE_FORMAT;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Kudos {
-    @JsonProperty
+    @JsonProperty("_id")
     public String id;
-
-    @JsonProperty
-    public String href;
 
     @JsonProperty
     public String topic;
@@ -28,22 +25,21 @@ public class Kudos {
     public String place;
 
     @JsonProperty
-    public String targetId;
-
-    @JsonProperty
     public String content;
 
     @JsonProperty
-    public String sourceId;
+    public Integer targetId;
+
+    @JsonProperty
+    public Integer sourceId;
 
     public Document toDocument() {
         Document doc = new Document("_id", this.id)
-                .append("href", this.href)
                 .append("topic", this.topic)
                 .append("date", this.date.toString())
                 .append("place", this.place)
-                .append("targetId", this.targetId)
                 .append("content", this.content)
+                .append("targetId", this.targetId)
                 .append("sourceId", this.sourceId);
 
         return doc;
@@ -51,12 +47,11 @@ public class Kudos {
 
     public void fromDocument(Document doc) {
         this.id = doc.getString("_id");
-        this.href = doc.getString("href");
         this.topic = doc.getString("topic");
         this.date = ZonedDateTime.parse(doc.getString("date"));
         this.place = doc.getString("place");
-        this.targetId = doc.getString("targetId");
         this.content = doc.getString("content");
-        this.sourceId = doc.getString("sourceId");
+        this.targetId = doc.getInteger("targetId");
+        this.sourceId = doc.getInteger("sourceId");
     }
 }

@@ -1,6 +1,10 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.DeliverCallback;
 import model.Kudos;
 import org.bson.Document;
 import play.libs.Json;
@@ -39,9 +43,38 @@ public class KudosController extends Controller {
         return ok(content);
     }
 
+    public Result getByTargetId(Integer id) {
+        List<Document> list = this.service.getByTargetId(id);
+        JsonNode content =  Json.toJson(list);
+
+        return ok(content);
+    }
+
     public Result delete(String id) {
         this.service.delete(id);
 
         return ok();
+    }
+
+    public Result testmq() throws Exception {
+        String QUEUE_NAME = "hello";
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost("localhost");
+        factory.setPort(5672);
+        factory.setUsername("admin");
+        factory.setPassword("12345");
+        Connection connection = factory.newConnection();
+        Channel channel = connection.createChannel();
+
+        channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+
+        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+            String message = new String(delivery.getBody(), "UTF-8");
+            System.out.println(" [x] Received '" + message + "'");
+        };
+        channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
+
+        return ok(" [x] Received ''");
     }
 }
