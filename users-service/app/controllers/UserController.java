@@ -3,9 +3,6 @@ package controllers;
 import akka.japi.Pair;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
 import model.Kudos;
 import model.User;
 import play.libs.Json;
@@ -71,20 +68,20 @@ public class UserController extends Controller {
     }
 
     public Result testmq() throws Exception {
-        String QUEUE_NAME = "hello";
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
-        factory.setPort(5672);
-        factory.setUsername("admin");
-        factory.setPassword("12345");
-        try (Connection connection = factory.newConnection();
-             Channel channel = connection.createChannel()) {
-            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-            String message = "Hello World!";
-            channel.basicPublish("", QUEUE_NAME, null, message.getBytes("UTF-8"));
-            System.out.println(" [x] Sent '" + message + "'");
-        }
-
+//        String QUEUE_NAME = "hello";
+//        ConnectionFactory factory = new ConnectionFactory();
+//        factory.setHost("localhost");
+//        factory.setPort(5672);
+//        factory.setUsername("admin");
+//        factory.setPassword("12345");
+//        try (Connection connection = factory.newConnection();
+//             Channel channel = connection.createChannel()) {
+//            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+//            String message = "Hello World!";
+//            channel.basicPublish("", QUEUE_NAME, null, message.getBytes("UTF-8"));
+//            System.out.println(" [x] Sent '" + message + "'");
+//        }
+//        this.service.sendMessage("NEW MSG :) ");
         return ok(" [x] Sent ''");
     }
 }

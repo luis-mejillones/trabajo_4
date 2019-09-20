@@ -73,4 +73,8 @@ public class KudosService {
 
         return list;
     }
+
+    public void deleteByUserId(Integer userId) {
+        Logger.info(">>> Deleting Kudos for userId: " + userId);
+    }
 }

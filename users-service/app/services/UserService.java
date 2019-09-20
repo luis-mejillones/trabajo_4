@@ -5,16 +5,21 @@ import model.Kudos;
 import model.User;
 import org.springframework.util.StringUtils;
 import play.Logger;
-import play.mvc.Result;
+import util.message.MessageType;
+import util.message.Message;
 
+import javax.inject.Inject;
 import java.util.List;
 
 
 public class UserService {
     private KudosService kudosService;
+    private MessageSender messageSender;
 
-    public UserService() {
-        this.kudosService = new KudosService();
+    @Inject
+    public UserService(KudosService kudosService, MessageSender messageSender) {
+        this.kudosService = kudosService;
+        this.messageSender = messageSender;
     }
 
     public User create(User user) {
@@ -46,6 +51,7 @@ public class UserService {
 
     public void delete(Integer id) {
         User.find.ref(id).delete();
+        this.sendMessage(MessageType.DELETE_USER, id.toString());
         Logger.info("User delete with id: " + id);
     }
 
@@ -107,5 +113,13 @@ public class UserService {
         Logger.info("User records found: " + list.size());
 
         return list;
+    }
+
+    public void sendMessage(MessageType type, String message) {
+        Message msg = new Message();
+        msg.setMessageType(type);
+        msg.setContent(message);
+
+        this.messageSender.send(msg);
     }
 }
