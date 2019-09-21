@@ -32,15 +32,22 @@ public class UserService {
     public List<User> getAll() {
         List<User> list = User.find.all();
         Logger.info("Users retrieved: " + list.size());
-        for(User item: list) {
-            List<Kudos> kudos = this.kudosService.getKudos(item.id);
-            item.kudosQty = kudos.size();
-        }
+//        for(User item: list) {
+//            List<Kudos> kudos = this.kudosService.getKudos(item.id);
+//            item.kudosQty = kudos.size();
+//        }
 
         return list;
     }
 
-    public Pair<User, List<Kudos>> getById(Integer id) {
+    public User getById(Integer id) {
+        User out = User.find.ref(id);
+        Logger.info("User find by id: " + out.id);
+
+        return out;
+    }
+
+    public Pair<User, List<Kudos>> getDetailById(Integer id) {
         User out = User.find.ref(id);
         Logger.info("User find by id: " + out.id);
 
@@ -51,7 +58,7 @@ public class UserService {
 
     public void delete(Integer id) {
         User.find.ref(id).delete();
-        this.sendMessage(MessageType.DELETE_USER, id.toString());
+//        this.sendMessage(MessageType.DELETE_USER, id.toString());
         Logger.info("User delete with id: " + id);
     }
 
@@ -121,5 +128,21 @@ public class UserService {
         msg.setContent(message);
 
         this.messageSender.send(msg);
+    }
+
+    public void updateKudosQty(String msg) {
+        Kudos kudos = new Kudos();
+        try {
+            kudos.fromString(msg);
+        } catch (Exception e) {
+            Logger.error(">>> Error parsing received message: '" + msg + "' " + e.getMessage());
+
+            return;
+        }
+
+        User user = this.getById(kudos.targetId);
+        user.kudosQty++;
+        user.update();
+        Logger.info(">>> Kudos incremented for targetId:" + kudos.targetId + " to " + user.kudosQty);
     }
 }

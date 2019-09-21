@@ -1,9 +1,14 @@
 package model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
+import play.libs.Json;
+import util.message.Message;
 
+import java.io.IOException;
 import java.time.ZonedDateTime;
 
 import static util.Constants.DATE_FORMAT;
@@ -31,6 +36,18 @@ public class Kudos {
     @JsonProperty
     public Integer sourceId;
 
+    @JsonIgnore
+    public void fromString(String msg) throws IOException {
+        JsonNode json = Json.mapper().readTree(msg);
+        Kudos kudos = Json.mapper().treeToValue(json, Kudos.class);
+        this.id = kudos.id;
+        this.topic = kudos.topic;
+        this.date = kudos.date;
+        this.place = kudos.place;
+        this.content = kudos.content;
+        this.targetId = kudos.targetId;
+        this.sourceId = kudos.sourceId;
+    }
 //    public Document toDocument() {
 //        Document doc = new Document("_id", this.id)
 //                .append("topic", this.topic)

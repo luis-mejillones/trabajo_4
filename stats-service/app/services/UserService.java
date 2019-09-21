@@ -5,7 +5,6 @@ import model.Kudos;
 import model.User;
 import org.springframework.util.StringUtils;
 import play.Logger;
-import play.mvc.Result;
 
 import java.util.List;
 

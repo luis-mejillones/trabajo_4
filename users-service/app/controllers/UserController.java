@@ -42,7 +42,14 @@ public class UserController extends Controller {
     }
 
     public Result getById(Integer id) {
-        Pair<User, List<Kudos>> pair = this.service.getById(id);
+        User user = this.service.getById(id);
+        JsonNode content = Json.toJson(user);
+
+        return ok(content);
+    }
+
+    public Result getDetailById(Integer id) {
+        Pair<User, List<Kudos>> pair = this.service.getDetailById(id);
         JsonNode user = Json.toJson(pair.first());
         JsonNode kudos = Json.toJson(pair.second());
 

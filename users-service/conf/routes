@@ -13,6 +13,7 @@ POST /users/create               controllers.UserController.create()
 POST /users/delete/:id           controllers.UserController.delete(id: Integer)
 GET  /users/list                 controllers.UserController.getAll()
 GET  /users/find                 controllers.UserController.find()
+GET  /users/:id/detail           controllers.UserController.getDetailById(id: Integer)
 GET  /users/:id                  controllers.UserController.getById(id: Integer)
 
 GET  /user/test/mq                  controllers.UserController.testmq()

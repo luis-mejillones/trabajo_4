@@ -7,20 +7,20 @@ import play.Logger;
 import util.Constants;
 import util.message.Message;
 
-public class MessageSender {
+public class UsersMessageSender {
     private ConnectionFactory factory;
 
-    public MessageSender() throws Exception {
-        Logger.info(">>> MessageSender service is starting...");
+    public UsersMessageSender() throws Exception {
+        Logger.info(">>> UsersMessageSender service is starting...");
         this.setup();
     }
 
     private void setup() {
         this.factory = new ConnectionFactory();
-        factory.setHost("localhost");
-        factory.setPort(5672);
-        factory.setUsername("admin");
-        factory.setPassword("12345");
+        factory.setHost(Constants.QUEUE_HOST);
+        factory.setPort(Constants.QUEUE_PORT);
+        factory.setUsername(Constants.QUEUE_USER_NAME);
+        factory.setPassword(Constants.QUEUE_PASSWORD);
 
     }
 
